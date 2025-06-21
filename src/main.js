@@ -1,4 +1,4 @@
-// Criando a cena e camera
+// cria a cena e a câmera
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
   75,
@@ -8,35 +8,44 @@ const camera = new THREE.PerspectiveCamera(
 );
 
 // posiciona a câmera
-camera.position.z = 5;
+camera.position.z = 20;
 
 // cria o renderizador
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-// adiciona luz ambiente
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+// adiciona as luzes
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
 scene.add(ambientLight);
 
-// adiciona uma luz pontual
-const pointLight = new THREE.PointLight(0xffffff, 1);
-pointLight.position.set(10, 10, 10);
+const pointLight = new THREE.PointLight(0xffffff, 3, 1000);
+pointLight.position.set(0, 0, 0);
 scene.add(pointLight);
 
-// cria um cubo de teste
-const geometry = new THREE.BoxGeometry();
-const material = new THREE.MeshStandardMaterial({ color: 0x00ff00 });
-const cube = new THREE.Mesh(geometry, material);
-scene.add(cube);
+const sun = createSun();
 
+function createSun() {
+  const textureLoader = new THREE.TextureLoader();
+  const sunTexture = textureLoader.load("./assets/textures/8k_sun.jpg");
 
-// Função de animação
+  const sunGeometry = new THREE.SphereGeometry(5, 64, 64);
+  const sunMaterial = new THREE.MeshBasicMaterial({
+    map: sunTexture,
+    lightMap: sunTexture,
+    lightMapIntensity: 5,
+  });
+
+  const sun = new THREE.Mesh(sunGeometry, sunMaterial);
+  scene.add(sun);
+
+  return sun;
+}
+
 function animate() {
   requestAnimationFrame(animate);
 
-  cube.rotation.x += 0.01;
-  cube.rotation.y += 0.01;
+  sun.rotation.y += 0.001;
 
   renderer.render(scene, camera);
 }
