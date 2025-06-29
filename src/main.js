@@ -34,63 +34,71 @@ const sun = createSun();
 const planetas = [];
 
 function createPlanets() {
-  const dadosPlanetas = [
-    { nome: "Mercurio", textura: "8k_mercury.jpg", raio: 0.6, distancia: 8 },
-    { nome: "Venus", textura: "8k_venus.jpg", raio: 0.9, distancia: 11 },
-    { nome: "Terra", textura: "8k_earth.jpg", raio: 1, distancia: 14 },
-    { nome: "Lua", textura: "8k_moon.jpg", raio: 0.27, distancia: 15.5 },
-    { nome: "Marte", textura: "8k_mars.jpg", raio: 0.8, distancia: 17 },
-    { nome: "Jupiter", textura: "8k_jupiter.jpg", raio: 2.5, distancia: 21 },
+const dadosPlanetas = [
+    { nome: "Mercurio", textura: "8k_mercury.jpg", raio: 0.6, distancia: 8, velocidadeRotacao: 0.004 },
+    { nome: "Venus", textura: "8k_venus.jpg", raio: 0.9, distancia: 11, velocidadeRotacao: 0.002 },
+    { nome: "Terra", textura: "8k_earth.jpg", raio: 1, distancia: 14, velocidadeRotacao: 0.010 },
+    { nome: "Lua", textura: "8k_moon.jpg", raio: 0.27, distancia: 15.5, velocidadeRotacao: 0.001 },
+    { nome: "Marte", textura: "8k_mars.jpg", raio: 0.8, distancia: 17, velocidadeRotacao: 0.009 },
+    { nome: "Jupiter", textura: "8k_jupiter.jpg", raio: 2.5, distancia: 21, velocidadeRotacao: 0.022 },
     {
-      nome: "Saturno",
-      textura: "8k_saturn.jpg",
-      raio: 2.2,
-      distancia: 26,
-      anel: true,
-    },
-    { nome: "Urano", textura: "2k_uranus.jpg", raio: 1.5, distancia: 31 },
-    { nome: "Netuno", textura: "2k_neptune.jpg", raio: 1.5, distancia: 36 },
-  ];
+        nome: "Saturno",
+        textura: "8k_saturn.jpg",
+        raio: 2.2,
+        distancia: 26,
+        anel: true,
+        velocidadeRotacao: 0.018 },
+    { nome: "Urano", textura: "2k_uranus.jpg", raio: 1.5, distancia: 31, velocidadeRotacao: 0.015 },
+    { nome: "Netuno", textura: "2k_neptune.jpg", raio: 1.5, distancia: 36, velocidadeRotacao: 0.014 },
+];
 
-  dadosPlanetas.forEach((p) => {
+dadosPlanetas.forEach((p) => {
+
     const textura = textureLoader.load(`./assets/textures/${p.textura}`);
     const geometria = new THREE.SphereGeometry(p.raio, 64, 64);
     const material = new THREE.MeshStandardMaterial({ map: textura });
     const planeta = new THREE.Mesh(geometria, material);
-    planeta.position.x = p.distancia;
-    scene.add(planeta);
-    planetas.push({ mesh: planeta, ...p });
 
+    // Grupo "pai" do planeta e de seus anéis
+    const planetaGroup = new THREE.Group();
+    planetaGroup.add(planeta);
+
+    // Verifica se o planeta tem um anel
     if (p.anel) {
-      const ringGeometry = new THREE.RingGeometry(
-        p.raio + 0.4,
-        p.raio + 1.5,
-        64
-      );
-      const ringTexture = textureLoader.load(
-        "./assets/textures/saturn_ring.png"
-      );
-      const ringMaterial = new THREE.MeshBasicMaterial({
-        map: ringTexture,
-        side: THREE.DoubleSide,
-        transparent: true,
-      });
-      const ring = new THREE.Mesh(ringGeometry, ringMaterial);
-      ring.rotation.x = Math.PI / 2;
-      ring.position.copy(planeta.position);
-      scene.add(ring);
+        const ringGeometry = new THREE.RingGeometry(p.raio + 0.4, p.raio + 1.5, 64);
+        const ringTexture = textureLoader.load("./assets/textures/saturn_ring.png");
+        const ringMaterial = new THREE.MeshBasicMaterial({
+            map: ringTexture,
+            side: THREE.DoubleSide,
+            transparent: true,
+        });
+        const ring = new THREE.Mesh(ringGeometry, ringMaterial);
+        ring.rotation.x = Math.PI / 2;
+
+        planetaGroup.add(ring);
     }
-  });
+
+    planetaGroup.position.x = p.distancia;
+
+    scene.add(planetaGroup);
+
+    // Referência do MESH (p/rotação) e do GRUPO (p/ translação)
+    planetas.push({ mesh: planeta, group: planetaGroup, ...p });
+});
 }
 
 createPlanets();
 
-function animate() {
-  requestAnimationFrame(animate);
+  function animate() {
+    requestAnimationFrame(animate);
 
-  sun.rotation.y += 0.001;
+    sun.rotation.y += 0.001;
 
-  renderer.render(scene, camera);
+    planetas.forEach(planeta => {
+        planeta.mesh.rotation.y += planeta.velocidadeRotacao;
+    });
+
+    renderer.render(scene, camera);
 }
 
 animate();

@@ -1,4 +1,4 @@
-# Projeto Sistema Solar  
+# Projeto Sistema Solar
 
 Projeto de Visualização do Sistema Solar em 3D usando Three.js.
 
