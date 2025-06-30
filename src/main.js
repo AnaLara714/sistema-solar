@@ -1,3 +1,6 @@
+import * as THREE from "https://unpkg.com/three@0.112/build/three.module.js";
+import { OrbitControls } from "https://unpkg.com/three@0.112/examples/jsm/controls/OrbitControls.js";
+
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
   75,
@@ -5,7 +8,7 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   1000
 );
-camera.position.set(0, 10, 45);
+camera.position.set(0, 5, 45);
 
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -18,17 +21,31 @@ const pointLight = new THREE.PointLight(0xffffff, 3, 1000);
 pointLight.position.set(0, 0, 0);
 scene.add(pointLight);
 
-const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5);
+const directionalLight = new THREE.DirectionalLight(0xffffff, 1.2);
 directionalLight.position.set(50, 50, 50);
 scene.add(directionalLight);
 
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.05;
 
 const textureLoader = new THREE.TextureLoader();
 
 const starTexture = textureLoader.load(
-  "./assets/textures/2k_stars_milky_way.jpg"
+  "./assets/textures/8k_stars_milky_way.jpg"
 );
 scene.background = starTexture;
+
+const fundoGeometry = new THREE.SphereGeometry(500, 64, 64);
+const fundoMaterial = new THREE.MeshBasicMaterial({
+  map: starTexture,
+  side: THREE.BackSide,
+  opacity: 0.5,
+  transparent: true,
+  color: 0xffffff, 
+});
+const fundo = new THREE.Mesh(fundoGeometry, fundoMaterial);
+scene.add(fundo);
 
 function createSun() {
   const sunTexture = textureLoader.load("./assets/textures/8k_sun.jpg");
@@ -68,14 +85,6 @@ function createPlanets() {
       distancia: 14,
       velocidadeRotacao: 0.01,
       velocidadeTranslacao: 0.01,
-    },
-    {
-      nome: "Lua",
-      textura: "8k_moon.jpg",
-      raio: 0.27,
-      distancia: 15.5,
-      velocidadeRotacao: 0.001,
-      velocidadeTranslacao: 0.02,
     },
     {
       nome: "Marte",
@@ -126,11 +135,9 @@ function createPlanets() {
     const material = new THREE.MeshStandardMaterial({ map: textura });
     const planeta = new THREE.Mesh(geometria, material);
 
-    // Grupo "pai" do planeta e de seus anéis
     const planetaGroup = new THREE.Group();
     planetaGroup.add(planeta);
 
-    // Verifica se o planeta tem um anel
     if (p.anel) {
       const ringGeometry = new THREE.RingGeometry(
         p.raio + 0.4,
@@ -155,13 +162,35 @@ function createPlanets() {
 
     scene.add(planetaGroup);
 
-    // Referência do MESH (p/rotação) e do GRUPO (p/ translação)
     planetas.push({
       mesh: planeta,
       group: planetaGroup,
       anguloOrbital: Math.random() * Math.PI * 2,
       ...p,
     });
+
+    if (p.nome === "Terra") {
+      const moonTexture = textureLoader.load("./assets/textures/8k_moon.jpg");
+      const moonGeometry = new THREE.SphereGeometry(0.27, 32, 32);
+      const moonMaterial = new THREE.MeshStandardMaterial({ map: moonTexture });
+      const moon = new THREE.Mesh(moonGeometry, moonMaterial);
+    
+      const moonGroup = new THREE.Group();
+      moonGroup.add(moon);
+      moon.position.x = 0.3
+
+      planetaGroup.add(moonGroup);
+
+      planetas.push({
+        mesh: moon,
+        group: moonGroup,
+        anguloOrbital: Math.random() * Math.PI * 2,
+        velocidadeRotacao: 0.005,
+        velocidadeTranslacao: 0.04,
+        isMoon: true,
+      });
+    }
+    
   });
 }
 
@@ -176,10 +205,15 @@ function animate() {
     planeta.mesh.rotation.y += planeta.velocidadeRotacao;
 
     planeta.anguloOrbital += planeta.velocidadeTranslacao;
-    planeta.group.position.x =
-      Math.cos(planeta.anguloOrbital) * planeta.distancia;
-    planeta.group.position.z =
-      Math.sin(planeta.anguloOrbital) * planeta.distancia;
+    if (planeta.isMoon) {
+      planeta.group.position.x = Math.cos(planeta.anguloOrbital) * 1.5;
+      planeta.group.position.z = Math.sin(planeta.anguloOrbital) * 1.5;
+    } else {
+      planeta.group.position.x =
+        Math.cos(planeta.anguloOrbital) * planeta.distancia;
+      planeta.group.position.z =
+        Math.sin(planeta.anguloOrbital) * planeta.distancia;
+    }
   });
 
   renderer.render(scene, camera);
