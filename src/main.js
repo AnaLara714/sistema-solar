@@ -35,21 +35,21 @@ const planetas = [];
 
 function createPlanets() {
 const dadosPlanetas = [
-    { nome: "Mercurio", textura: "8k_mercury.jpg", raio: 0.6, distancia: 8, velocidadeRotacao: 0.004 },
-    { nome: "Venus", textura: "8k_venus.jpg", raio: 0.9, distancia: 11, velocidadeRotacao: 0.002 },
-    { nome: "Terra", textura: "8k_earth.jpg", raio: 1, distancia: 14, velocidadeRotacao: 0.010 },
-    { nome: "Lua", textura: "8k_moon.jpg", raio: 0.27, distancia: 15.5, velocidadeRotacao: 0.001 },
-    { nome: "Marte", textura: "8k_mars.jpg", raio: 0.8, distancia: 17, velocidadeRotacao: 0.009 },
-    { nome: "Jupiter", textura: "8k_jupiter.jpg", raio: 2.5, distancia: 21, velocidadeRotacao: 0.022 },
+    { nome: "Mercurio", textura: "8k_mercury.jpg", raio: 0.6, distancia: 8, velocidadeRotacao: 0.004, velocidadeTranslacao: 0.04},
+    { nome: "Venus", textura: "8k_venus.jpg", raio: 0.9, distancia: 11, velocidadeRotacao: 0.002, velocidadeTranslacao: 0.015 },
+    { nome: "Terra", textura: "8k_earth.jpg", raio: 1, distancia: 14, velocidadeRotacao: 0.010, velocidadeTranslacao: 0.01 },
+    { nome: "Lua", textura: "8k_moon.jpg", raio: 0.27, distancia: 15.5, velocidadeRotacao: 0.001, velocidadeTranslacao: 0.02 },
+    { nome: "Marte", textura: "8k_mars.jpg", raio: 0.8, distancia: 17, velocidadeRotacao: 0.009,  velocidadeTranslacao: 0.008 },
+    { nome: "Jupiter", textura: "8k_jupiter.jpg", raio: 2.5, distancia: 21, velocidadeRotacao: 0.022, velocidadeTranslacao: 0.006 },
     {
         nome: "Saturno",
         textura: "8k_saturn.jpg",
         raio: 2.2,
         distancia: 26,
         anel: true,
-        velocidadeRotacao: 0.018 },
-    { nome: "Urano", textura: "2k_uranus.jpg", raio: 1.5, distancia: 31, velocidadeRotacao: 0.015 },
-    { nome: "Netuno", textura: "2k_neptune.jpg", raio: 1.5, distancia: 36, velocidadeRotacao: 0.014 },
+        velocidadeRotacao: 0.018, velocidadeTranslacao: 0.004 },
+    { nome: "Urano", textura: "2k_uranus.jpg", raio: 1.5, distancia: 31, velocidadeRotacao: 0.015, velocidadeTranslacao: 0.002 },
+    { nome: "Netuno", textura: "2k_neptune.jpg", raio: 1.5, distancia: 36, velocidadeRotacao: 0.014, velocidadeTranslacao: 0.0015 },
 ];
 
 dadosPlanetas.forEach((p) => {
@@ -83,7 +83,7 @@ dadosPlanetas.forEach((p) => {
     scene.add(planetaGroup);
 
     // Referência do MESH (p/rotação) e do GRUPO (p/ translação)
-    planetas.push({ mesh: planeta, group: planetaGroup, ...p });
+    planetas.push({ mesh: planeta, group: planetaGroup, anguloOrbital: Math.random() * Math.PI * 2, ...p });
 });
 }
 
@@ -96,6 +96,11 @@ createPlanets();
 
     planetas.forEach(planeta => {
         planeta.mesh.rotation.y += planeta.velocidadeRotacao;
+
+       
+      planeta.anguloOrbital += planeta.velocidadeTranslacao;
+      planeta.group.position.x = Math.cos(planeta.anguloOrbital) * planeta.distancia;
+      planeta.group.position.z = Math.sin(planeta.anguloOrbital) * planeta.distancia;
     });
 
     renderer.render(scene, camera);
