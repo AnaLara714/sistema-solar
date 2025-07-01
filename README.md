@@ -2,10 +2,8 @@
 
 Projeto de Visualização do Sistema Solar em 3D, interativo e em tempo real, desenvolvido com a biblioteca Three.js para a disciplina de **Computação Gráfica (2025.1)**.
 
- - Link para Visualização no Youtube
-  ``` (https://youtu.be/6sJGrojS5iY) ```
-- Link do Deploy
-  ``` (https://analara714.github.io/sistema-solar/) ```
+ - [Link para Visualização no Youtube](https://youtu.be/6sJGrojS5iY) 
+- [Link do Deploy](https://analara714.github.io/sistema-solar/) 
 
 ## Pré-visualização
 
@@ -24,6 +22,7 @@ Projeto de Visualização do Sistema Solar em 3D, interativo e em tempo real, de
     - **Velocidade:** Altere a velocidade de rotação dos planetas.
 - Fonte de luz centralizada no Sol para simular a iluminação dos corpos celestes.
 - Texturas realistas aplicadas às superfícies dos planetas.
+- Terra com seu satélite natural.
 
 ## Tecnologias Utilizadas
 
@@ -40,7 +39,7 @@ Para executar este projeto, você precisará de um navegador de internet moderno
 
 **1. Clone o repositório:**
 ```markdown
-git clone [https://github.com/Analara714/sistema-solar.git]
+git clone https://github.com/Analara714/sistema-solar.git
 ```
 
 **2. Navegue até a pasta do projeto:**
@@ -60,6 +59,8 @@ cd sistema-solar
 - **Mover a Câmera (Pan):** Clique e arraste com o botão direito do mouse.
 - **Aumentar velocidade:** Seta para cima.
 - **Diminuir velocidade:** Seta para baixo.
+- **Alterar a velocidade de cada planeta:** Aperte 1 a 8 e para modificar a velocidade do respectivo planeta Seta para cima ou para baixo.
+- **Resetar a velocidade:** Aperte "r".
 
 ## Autores
 
