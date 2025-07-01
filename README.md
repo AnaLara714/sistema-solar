@@ -1,8 +1,6 @@
 # Projeto Sistema Solar
 
-Projeto de Visualização do Sistema Solar em 3D, interativo e em tempo real, desenvolvido com a biblioteca Three.js para a disciplina de Computação Gráfica (2025.1).
-
-Disciplina de computação gráfica - 2025.1
+Projeto de Visualização do Sistema Solar em 3D, interativo e em tempo real, desenvolvido com a biblioteca Three.js para a disciplina de **Computação Gráfica (2025.1)**.
 
 ## Pré-visualização
 
