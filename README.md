@@ -83,9 +83,9 @@ cd sistema-solar
 
 Desenvolvido por:
 
-Ana Lara Carvalho Mesquita - 498866
-Bianka Aparecida de Carvalho - 537278
-Eric da Costa Evaristo - 499158
-Marina Paula Fontenele - 539022
-Pedro Eric Carneiro - 538121
-Pricila Aquila Araujo - 499464
+- Ana Lara Carvalho Mesquita - 498866
+- Bianka Aparecida de Carvalho - 537278
+- Eric da Costa Evaristo - 499158
+- Marina Paula Fontenele - 539022
+- Pedro Eric Carneiro - 538121
+- Pricila Aquila Araujo - 499464
