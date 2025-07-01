@@ -2,6 +2,9 @@
 
 Projeto de Visualização do Sistema Solar em 3D, interativo e em tempo real, desenvolvido com a biblioteca Three.js para a disciplina de **Computação Gráfica (2025.1)**.
 
+## Link para Vizualização no Youtube
+  ``` [link] ```
+
 ## Pré-visualização
 
 <p align="center">
