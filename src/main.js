@@ -1,6 +1,10 @@
 import * as THREE from "https://unpkg.com/three@0.112/build/three.module.js";
 import { OrbitControls } from "https://unpkg.com/three@0.112/examples/jsm/controls/OrbitControls.js";
 
+let fatorVelocidadeGlobal = 1;
+let planetaSelecionado = null;
+const passoVelocidade = 0.1;
+
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
   75,
@@ -132,8 +136,8 @@ function createPlanets() {
   dadosPlanetas.forEach((p) => {
     const textura = textureLoader.load(`./assets/textures/${p.textura}`);
     const geometria = new THREE.SphereGeometry(p.raio, 64, 64);
-    const material = new THREE.MeshStandardMaterial({ map: textura });
-    const planeta = new THREE.Mesh(geometria, material);
+    const material = new THREE.MeshPhongMaterial({ map: textura });
+    const planeta = new THREE.Mesh(new THREE.SphereGeometry(p.raio, 64, 64), material);
 
     const planetaGroup = new THREE.Group();
     planetaGroup.add(planeta);
@@ -167,6 +171,8 @@ function createPlanets() {
       group: planetaGroup,
       anguloOrbital: Math.random() * Math.PI * 2,
       ...p,
+      velocidadeRotacaoOriginal: p.velocidadeRotacao,
+      velocidadeTranslacaoOriginal: p.velocidadeTranslacao,
     });
 
     if (p.nome === "Terra") {
@@ -202,9 +208,9 @@ function animate() {
   sun.rotation.y += 0.001;
 
   planetas.forEach((planeta) => {
-    planeta.mesh.rotation.y += planeta.velocidadeRotacao;
+    planeta.mesh.rotation.y += planeta.velocidadeRotacao * fatorVelocidadeGlobal;
 
-    planeta.anguloOrbital += planeta.velocidadeTranslacao;
+    planeta.anguloOrbital += planeta.velocidadeTranslacao * fatorVelocidadeGlobal;
     if (planeta.isMoon) {
       planeta.group.position.x = Math.cos(planeta.anguloOrbital) * 1.5;
       planeta.group.position.z = Math.sin(planeta.anguloOrbital) * 1.5;
@@ -216,7 +222,66 @@ function animate() {
     }
   });
 
+  controls.update();
+
   renderer.render(scene, camera);
 }
 
 animate();
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "ArrowUp") {
+    if (planetaSelecionado) {
+      const passoRotacao = planetaSelecionado.velocidadeRotacaoOriginal * 0.2;
+      const passoTranslacao = planetaSelecionado.velocidadeTranslacaoOriginal * 0.2;
+      
+      planetaSelecionado.velocidadeRotacao += passoRotacao;
+      planetaSelecionado.velocidadeTranslacao += passoTranslacao;
+    } else {
+      fatorVelocidadeGlobal += passoVelocidade;
+    }
+  } else if (event.key === "ArrowDown") {
+    if (planetaSelecionado) {
+      const passoRotacao = planetaSelecionado.velocidadeRotacaoOriginal * 0.2;
+      const passoTranslacao = planetaSelecionado.velocidadeTranslacaoOriginal * 0.2;
+
+      planetaSelecionado.velocidadeRotacao = Math.max(0, planetaSelecionado.velocidadeRotacao - passoRotacao);
+      planetaSelecionado.velocidadeTranslacao = Math.max(0, planetaSelecionado.velocidadeTranslacao - passoTranslacao);
+    } else {
+      fatorVelocidadeGlobal -= passoVelocidade;
+      if (fatorVelocidadeGlobal < 0) fatorVelocidadeGlobal = 0;
+    }
+  }
+
+  const planetIndex = parseInt(event.key) - 1;
+  if (planetIndex >= 0 && planetIndex < 8) {
+    if (planetaSelecionado) {
+      planetaSelecionado.mesh.material.emissive.setHex(0x000000);
+    }
+    const planetasPrincipais = planetas.filter((p) => !p.isMoon);
+    planetaSelecionado = planetasPrincipais[planetIndex];
+    planetaSelecionado.mesh.material.emissive.setHex(0x555555);
+  }
+
+  if (event.key === "0") {
+    if (planetaSelecionado) {
+      planetaSelecionado.mesh.material.emissive.setHex(0x000000);
+    }
+    planetaSelecionado = null;
+  }
+  
+  if (event.key.toLowerCase() === "r") {
+    if (planetaSelecionado) {
+      planetaSelecionado.velocidadeRotacao = planetaSelecionado.velocidadeRotacaoOriginal;
+      planetaSelecionado.velocidadeTranslacao = planetaSelecionado.velocidadeTranslacaoOriginal;
+    } else {
+      fatorVelocidadeGlobal = 1;
+      planetas.forEach(planeta => {
+        if (planeta.velocidadeRotacaoOriginal !== undefined) {
+          planeta.velocidadeRotacao = planeta.velocidadeRotacaoOriginal;
+          planeta.velocidadeTranslacao = planeta.velocidadeTranslacaoOriginal;
+        }
+      });
+    }
+  }
+});
