@@ -35,7 +35,7 @@ Para executar este projeto, você precisará de um navegador de internet moderno
 
 **1. Clone o repositório:**
 ```markdown
-git clone [https://github.com/Analara714/sistema-solar.git](https://github.com/Analara714/sistema-solar.git)
+git clone [https://github.com/Analara714/sistema-solar.git]
 ```
 
 **2. Navegue até a pasta do projeto:**
@@ -43,7 +43,6 @@ git clone [https://github.com/Analara714/sistema-solar.git](https://github.com/A
 cd sistema-solar
 ```
 **3. Inicie um servidor local usando a extensão "Live Server" no VS Code:**
-
     1. Instale a extensão Live Server no seu VS Code.
     2. Com a pasta do projeto aberta, clique com o botão direito no arquivo index.html.
     3. Selecione "Open with Live Server".
