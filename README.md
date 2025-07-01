@@ -43,10 +43,10 @@ git clone [https://github.com/Analara714/sistema-solar.git]
 cd sistema-solar
 ```
 **3. Inicie um servidor local usando a extensão "Live Server" no VS Code:**
-    1. Instale a extensão Live Server no seu VS Code.
-    2. Com a pasta do projeto aberta, clique com o botão direito no arquivo index.html.
-    3. Selecione "Open with Live Server".
-    4. O navegador abrirá automaticamente com o projeto em execução.
+  - Instale a extensão Live Server no seu VS Code.
+  - Com a pasta do projeto aberta, clique com o botão direito no arquivo index.html.
+  - Selecione "Open with Live Server".
+  - O navegador abrirá automaticamente com o projeto em execução.
 
 ## Controles
 
