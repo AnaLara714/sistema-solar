@@ -42,32 +42,12 @@ git clone [https://github.com/Analara714/sistema-solar.git](https://github.com/A
 ```bash
 cd sistema-solar
 ```
-**3. Inicie um servidor local (escolha uma das opções abaixo):**
-  - Opção A: Usando a extensão "Live Server" no VS Code (Recomendado)
-      1. Instale a extensão Live Server no seu VS Code.
-      2. Com a pasta do projeto aberta, clique com o botão direito no arquivo index.html.
-      3. Selecione "Open with Live Server".
-      4. O navegador abrirá automaticamente com o projeto em execução.
+**3. Inicie um servidor local usando a extensão "Live Server" no VS Code:**
 
-  - Opção B: Usando Python
-      1. Certifique-se de que você tem Python 3 instalado.
-      2. No terminal, dentro da pasta do projeto, execute o comando:
-    ```bash
-    python -m http.server
-    ```
-      3. Abra seu navegador e acesse: ```http://localhost:8000```
-         
-   - Opção C: Usando Node.js e o pacote serve
-       1. Certifique-se de que você tem Node.js e npm instalados.
-       2. Instale o serve globalmente (apenas uma vez):
-      ```bash
-      npm install -g serve
-      ```
-       3. Dentro da pasta do projeto, inicie o servidor:  
-      ```bash
-        serve
-      ```
-       4. O terminal mostrará o endereço para acessar, geralmente ```http://localhost:3000.```
+    1. Instale a extensão Live Server no seu VS Code.
+    2. Com a pasta do projeto aberta, clique com o botão direito no arquivo index.html.
+    3. Selecione "Open with Live Server".
+    4. O navegador abrirá automaticamente com o projeto em execução.
 
 ## Controles
 
